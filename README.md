@@ -1,62 +1,145 @@
 # Conduit Container
 
+Containerized Conduit-style application scaffold with a frontend, a WSGI-based backend, and a PostgreSQL database.
+This repository is designed for local Docker development first and can later be deployed to a cloud VM for the final submission.
+
 ## Table of Contents
-- [Overview](#overview)
-- [Repository Structure](#repository-structure)
 - [Quickstart](#quickstart)
+- [Overview](#overview)
+- [Requirements](#requirements)
+- [Project Structure](#project-structure)
 - [Usage](#usage)
+- [API Reference](#api-reference)
 - [Environment Variables](#environment-variables)
-
-## Overview
-This repository contains the containerized structure for a Conduit-style application.
-It is split into a backend service, a frontend service, and a PostgreSQL database service.
-
-## Repository Structure
-```text
-.
-├── backend
-│   ├── app
-│   ├── Dockerfile
-│   ├── requirements.txt
-│   └── wsgi.py
-├── frontend
-│   ├── public
-│   ├── src
-│   ├── Dockerfile
-│   ├── nginx.conf
-│   └── package.json
-├── docs
-├── docker-compose.yaml
-└── .env.example
-```
 
 ## Quickstart
 ### Prerequisites
 - Docker
 - Docker Compose
 
-### Start
-1. Copy `.env.example` to `.env`.
-2. Review the environment variables.
-3. Run `docker compose up --build`.
+### Setup
+1. Clone the repository.
+2. Copy `.env.example` to `.env`.
+3. Review the values in `.env`.
+4. Start the application:
+
+```bash
+docker compose up --build
+```
+
+### Open the application
+- Frontend: `http://localhost:8282`
+- Backend health check: `http://localhost:8000/health`
+- Database health check: `http://localhost:8000/db-health`
+
+## Overview
+The project is split into three services:
+- `frontend` serves the browser UI through Nginx.
+- `backend` exposes HTTP endpoints through Gunicorn and Flask.
+- `db` provides PostgreSQL persistence.
+
+The frontend reaches the backend through `/api`, so the setup stays portable between local Docker and a later VM deployment.
+
+## Requirements
+- Docker Engine with Compose support
+- A modern browser
+- Free local ports for:
+  - `8282` for the frontend
+  - `8000` for the backend
+  - `5432` for PostgreSQL
+
+## Project Structure
+```text
+.
+├── backend/
+│   ├── app/
+│   ├── Dockerfile
+│   ├── requirements.txt
+│   └── wsgi.py
+├── frontend/
+│   ├── public/
+│   ├── scripts/
+│   ├── src/
+│   ├── Dockerfile
+│   ├── nginx.conf.template
+│   └── package.json
+├── docker-compose.yaml
+└── .env.example
+```
 
 ## Usage
-The current files provide the initial project skeleton only.
-You can replace the placeholder backend and frontend implementations with the final application code.
-Adjust the environment variables in `.env` instead of hardcoding values in multiple files.
-Docker Compose is wired so that backend, frontend, and database settings stay aligned through the same variable names.
+### Start the stack
+```bash
+docker compose up --build
+```
+
+### Stop the stack
+```bash
+docker compose down
+```
+
+### Rebuild after configuration or code changes
+```bash
+docker compose up --build
+```
+
+### View logs
+```bash
+docker compose logs frontend
+docker compose logs backend
+docker compose logs db
+```
+
+### Save logs to a file
+```bash
+docker logs <container-name> > my-container-logs.txt
+```
+
+### What you should see
+- The frontend page should load on port `8282`.
+- The `Backend Health` card should show `Online`.
+- The `Database Health` card should show `Online`.
+
+## API Reference
+### `GET /health`
+Returns the backend service status and environment.
+
+Example response:
+```json
+{
+  "environment": "development",
+  "service": "conduit-backend",
+  "status": "ok"
+}
+```
+
+### `GET /db-health`
+Checks whether the backend can connect to PostgreSQL.
+
+Example response:
+```json
+{
+  "database": {
+    "database_name": "conduit",
+    "version": "PostgreSQL ..."
+  },
+  "status": "ok"
+}
+```
 
 ## Environment Variables
-- `APP_NAME`
-- `APP_ENV`
-- `APP_HOST`
-- `POSTGRES_DB`
-- `POSTGRES_USER`
-- `POSTGRES_PASSWORD`
-- `POSTGRES_HOST`
-- `POSTGRES_PORT`
-- `POSTGRES_SSLMODE`
-- `BACKEND_PORT`
-- `FRONTEND_PORT`
-- `API_BASE_URL`
-- `GUNICORN_WORKERS`
+All relevant runtime values are centralized through `.env` and reused by Docker Compose, the backend container, and the frontend build configuration.
+
+- `APP_NAME`: Backend service name shown in the health response
+- `APP_ENV`: Runtime environment label such as `development`
+- `APP_HOST`: Backend bind host
+- `BACKEND_PORT`: Backend container and host port
+- `FRONTEND_PORT`: Frontend host port
+- `POSTGRES_DB`: PostgreSQL database name
+- `POSTGRES_USER`: PostgreSQL username
+- `POSTGRES_PASSWORD`: PostgreSQL password
+- `POSTGRES_HOST`: PostgreSQL host name inside Docker
+- `POSTGRES_PORT`: PostgreSQL host/container port mapping
+- `POSTGRES_SSLMODE`: PostgreSQL SSL mode
+- `API_BASE_URL`: Frontend API base path, default `/api`
+- `GUNICORN_WORKERS`: Number of Gunicorn workers
