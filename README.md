@@ -43,13 +43,20 @@ It is split into a backend service, a frontend service, and a PostgreSQL databas
 ## Usage
 The current files provide the initial project skeleton only.
 You can replace the placeholder backend and frontend implementations with the final application code.
-Adjust ports, build steps, runtime commands, and service configuration as needed for the final submission.
+Adjust the environment variables in `.env` instead of hardcoding values in multiple files.
+Docker Compose is wired so that backend, frontend, and database settings stay aligned through the same variable names.
 
 ## Environment Variables
+- `APP_NAME`
+- `APP_ENV`
+- `APP_HOST`
 - `POSTGRES_DB`
 - `POSTGRES_USER`
 - `POSTGRES_PASSWORD`
+- `POSTGRES_HOST`
+- `POSTGRES_PORT`
+- `POSTGRES_SSLMODE`
 - `BACKEND_PORT`
 - `FRONTEND_PORT`
 - `API_BASE_URL`
-
+- `GUNICORN_WORKERS`

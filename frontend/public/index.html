@@ -3,13 +3,58 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Conduit Frontend</title>
+    <title>Conduit Container</title>
+    <link rel="stylesheet" href="./styles.css">
   </head>
   <body>
-    <main>
-      <h1>Conduit Frontend Placeholder</h1>
-      <p>The frontend structure is ready for implementation.</p>
-    </main>
+    <div class="page-shell">
+      <header class="hero">
+        <p class="eyebrow">Conduit Container</p>
+        <h1>Frontend Status Console</h1>
+        <p class="hero-copy">
+          This frontend validates that the client can reach the backend service
+          and its database health endpoint through the configured API base URL.
+        </p>
+      </header>
+
+      <main class="dashboard">
+        <section class="card card-highlight">
+          <h2>Environment</h2>
+          <p class="muted">Build-time frontend configuration.</p>
+          <dl class="fact-list">
+            <div>
+              <dt>API Base URL</dt>
+              <dd id="api-base-url">Loading...</dd>
+            </div>
+          </dl>
+        </section>
+
+        <section class="card">
+          <div class="card-heading">
+            <div>
+              <h2>Backend Health</h2>
+              <p class="muted">GET /health</p>
+            </div>
+            <span id="health-badge" class="status-badge status-loading">Checking</span>
+          </div>
+          <pre id="health-output" class="output">Waiting for response...</pre>
+        </section>
+
+        <section class="card">
+          <div class="card-heading">
+            <div>
+              <h2>Database Health</h2>
+              <p class="muted">GET /db-health</p>
+            </div>
+            <span id="db-badge" class="status-badge status-loading">Checking</span>
+          </div>
+          <pre id="db-output" class="output">Waiting for response...</pre>
+        </section>
+      </main>
+    </div>
+
+    <script src="./config.js"></script>
+    <script type="module" src="./main.js"></script>
   </body>
 </html>
 
