@@ -8,48 +8,64 @@
   </head>
   <body>
     <div class="page-shell">
-      <header class="hero">
-        <p class="eyebrow">Conduit Container</p>
-        <h1>Frontend Status Console</h1>
-        <p class="hero-copy">
-          This frontend validates that the client can reach the backend service
-          and its database health endpoint through the configured API base URL.
-        </p>
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Conduit Container</p>
+          <h1 class="site-title">Conduit Demo Surface</h1>
+        </div>
+        <nav class="nav-tabs" aria-label="Primary navigation">
+          <button class="nav-tab is-active" data-view="home">Home</button>
+          <button class="nav-tab" data-view="system">System</button>
+          <button class="nav-tab" data-view="about">About</button>
+        </nav>
       </header>
 
-      <main class="dashboard">
-        <section class="card card-highlight">
-          <h2>Environment</h2>
-          <p class="muted">Build-time frontend configuration.</p>
-          <dl class="fact-list">
+      <section class="hero">
+        <div>
+          <h2 id="hero-title">Loading application summary...</h2>
+          <p id="hero-copy" class="hero-copy">
+            The frontend is waiting for backend content.
+          </p>
+        </div>
+        <aside class="hero-panel">
+          <p class="panel-label">API Base URL</p>
+          <p id="api-base-url" class="panel-value">Loading...</p>
+          <div class="status-row">
+            <span id="health-badge" class="status-badge status-loading">Checking backend</span>
+            <span id="db-badge" class="status-badge status-loading">Checking database</span>
+          </div>
+        </aside>
+      </section>
+
+      <main class="layout">
+        <section class="content-panel">
+          <div class="section-heading">
             <div>
-              <dt>API Base URL</dt>
-              <dd id="api-base-url">Loading...</dd>
+              <p class="section-kicker">Live content</p>
+              <h3 id="section-title">Articles</h3>
             </div>
-          </dl>
+            <p id="section-subtitle" class="muted">Data loaded from the backend.</p>
+          </div>
+          <div id="article-list" class="article-list"></div>
         </section>
 
-        <section class="card">
-          <div class="card-heading">
-            <div>
-              <h2>Backend Health</h2>
-              <p class="muted">GET /health</p>
-            </div>
-            <span id="health-badge" class="status-badge status-loading">Checking</span>
-          </div>
-          <pre id="health-output" class="output">Waiting for response...</pre>
-        </section>
+        <aside class="sidebar">
+          <section class="card card-highlight">
+            <h3>Selected entry</h3>
+            <p id="selected-description" class="muted">
+              Choose an article to inspect its details.
+            </p>
+            <article class="article-detail">
+              <h4 id="selected-title">No article selected</h4>
+              <p id="selected-body">The article details will appear here.</p>
+            </article>
+          </section>
 
-        <section class="card">
-          <div class="card-heading">
-            <div>
-              <h2>Database Health</h2>
-              <p class="muted">GET /db-health</p>
-            </div>
-            <span id="db-badge" class="status-badge status-loading">Checking</span>
-          </div>
-          <pre id="db-output" class="output">Waiting for response...</pre>
-        </section>
+          <section class="card">
+            <h3>System output</h3>
+            <pre id="system-output" class="output compact-output">Waiting for health data...</pre>
+          </section>
+        </aside>
       </main>
     </div>
 
@@ -57,4 +73,3 @@
     <script type="module" src="./main.js"></script>
   </body>
 </html>
-
